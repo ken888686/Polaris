@@ -23,7 +23,7 @@ namespace Polaris.Controllers
                         return this.Ok(character);
                 }
 
-                [HttpGet("all")]
+                [HttpGet("")]
                 public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllAsync()
                 {
                         var characters = await this._characterService.GetAllCharactersAsync();
