@@ -3,8 +3,8 @@ namespace Polaris.Services.CharacterService
 {
         public interface ICharacterService
         {
-                Task<Character> GetCharacterByIdAsync(int id);
-                Task<List<Character>> GetAllCharactersAsync();
-                Task<List<Character>> AddCharacterAsync(Character newCharacter);
+                Task<ServiceResponse<Character>> GetCharacterByIdAsync(int id);
+                Task<ServiceResponse<List<Character>>> GetAllCharactersAsync();
+                Task<ServiceResponse<List<Character>>> AddCharacterAsync(Character newCharacter);
         }
 }
