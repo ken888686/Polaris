@@ -15,25 +15,25 @@ namespace Polaris.Controllers
                         this._characterService = characterService;
                 }
 
-                [HttpPost()]
-                public ActionResult<List<Character>> AddCharacter(Character character)
-                {
-                        var result = this._characterService.AddCharacter(character);
-                        return this.Ok(result);
-                }
-
                 [HttpGet("{id}")]
-                public ActionResult<Character> Get([FromRoute] int id)
+                public async Task<ActionResult<Character>> GetAsync([FromRoute] int id)
                 {
-                        var character = this._characterService.GetCharacterById(id);
+                        var character = await this._characterService.GetCharacterByIdAsync(id);
                         return this.Ok(character);
                 }
 
                 [HttpGet("all")]
-                public ActionResult<List<Character>> GetAll()
+                public async Task<ActionResult<List<Character>>> GetAllAsync()
                 {
-                        var characters = this._characterService.GetAllCharacters();
+                        var characters = await this._characterService.GetAllCharactersAsync();
                         return this.Ok(characters);
+                }
+
+                [HttpPost()]
+                public async Task<ActionResult<List<Character>>> AddCharacterAsync(Character character)
+                {
+                        var result = await this._characterService.AddCharacterAsync(character);
+                        return this.Ok(result);
                 }
         }
 }

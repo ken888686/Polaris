@@ -18,21 +18,21 @@ namespace Polaris.Services.CharacterService
                 {
                 }
 
-                public List<Character> AddCharacter(Character newCharacter)
-                {
-                        characters.Add(newCharacter);
-                        return characters;
-                }
-
-                public List<Character> GetAllCharacters()
+                public async Task<List<Character>> GetAllCharactersAsync()
                 {
                         return characters;
                 }
 
-                public Character GetCharacterById(int id)
+                public async Task<Character> GetCharacterByIdAsync(int id)
                 {
                         var result = characters.FirstOrDefault(x => x.Id.Equals(id));
                         return result ?? new Character();
+                }
+
+                public async Task<List<Character>> AddCharacterAsync(Character newCharacter)
+                {
+                        characters.Add(newCharacter);
+                        return characters;
                 }
         }
 }
