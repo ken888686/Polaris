@@ -1,4 +1,6 @@
 ﻿using System;
+using AutoMapper;
+using Polaris.Dtos.Character;
 
 namespace Polaris.Services.CharacterService
 {
@@ -6,38 +8,47 @@ namespace Polaris.Services.CharacterService
         {
                 private static List<Character> characters = new List<Character>
                 {
-                        new Character(),
                         new Character
                         {
                                 Id = 1,
+                                Name = "Jason"
+                        },
+                        new Character
+                        {
+                                Id = 2,
                                 Name = "Aaron"
                         }
                 };
 
-                public CharacterService()
+                private readonly IMapper _mapper;
+
+                public CharacterService(IMapper mapper)
                 {
+                        this._mapper = mapper;
                 }
 
-                public async Task<ServiceResponse<List<Character>>> GetAllCharactersAsync()
+                public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync()
                 {
-                        var serviceResponse = new ServiceResponse<List<Character>>();
-                        serviceResponse.Data = characters;
+                        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+                        serviceResponse.Data = this._mapper.Map<List<GetCharacterDto>>(characters);
                         return serviceResponse;
                 }
 
-                public async Task<ServiceResponse<Character>> GetCharacterByIdAsync(int id)
+                public async Task<ServiceResponse<GetCharacterDto>> GetCharacterByIdAsync(int id)
                 {
-                        var serviceResponse = new ServiceResponse<Character>();
+                        var serviceResponse = new ServiceResponse<GetCharacterDto>();
                         var result = characters.FirstOrDefault(x => x.Id.Equals(id));
-                        serviceResponse.Data = result;
+                        serviceResponse.Data = this._mapper.Map<GetCharacterDto>(result);
                         return serviceResponse;
                 }
 
-                public async Task<ServiceResponse<List<Character>>> AddCharacterAsync(Character newCharacter)
+                public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
                 {
-                        var serviceResponse = new ServiceResponse<List<Character>>();
-                        characters.Add(newCharacter);
-                        serviceResponse.Data = characters;
+                        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+                        var dto = this._mapper.Map<Character>(newCharacter);
+                        dto.Id = characters.Max(x => x.Id) + 1;
+                        characters.Add(dto);
+                        serviceResponse.Data = this._mapper.Map<List<GetCharacterDto>>(characters);
                         return serviceResponse;
                 }
         }

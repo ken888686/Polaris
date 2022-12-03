@@ -1,10 +1,12 @@
 ﻿using System;
+using Polaris.Dtos.Character;
+
 namespace Polaris.Services.CharacterService
 {
         public interface ICharacterService
         {
-                Task<ServiceResponse<Character>> GetCharacterByIdAsync(int id);
-                Task<ServiceResponse<List<Character>>> GetAllCharactersAsync();
-                Task<ServiceResponse<List<Character>>> AddCharacterAsync(Character newCharacter);
+                Task<ServiceResponse<GetCharacterDto>> GetCharacterByIdAsync(int id);
+                Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync();
+                Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter);
         }
 }

@@ -10,7 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+// Add Services
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+
 
 var app = builder.Build();
 
