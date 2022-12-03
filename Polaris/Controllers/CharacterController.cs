@@ -31,9 +31,11 @@ namespace Polaris.Controllers
                 }
 
                 [HttpPost()]
-                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(AddCharacterDto character)
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(AddCharacterDto newCharacter)
                 {
-                        var result = await this._characterService.AddCharacterAsync(character);
+                        var result = await this._characterService.AddCharacterAsync(newCharacter);
+                        return this.Ok(result);
+                }
                         return this.Ok(result);
                 }
         }
