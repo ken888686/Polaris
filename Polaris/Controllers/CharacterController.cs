@@ -36,6 +36,11 @@ namespace Polaris.Controllers
                         var result = await this._characterService.AddCharacterAsync(newCharacter);
                         return this.Ok(result);
                 }
+
+                [HttpPut()]
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+                {
+                        var result = await this._characterService.UpdateCharacter(updatedCharacter);
                         return this.Ok(result);
                 }
         }

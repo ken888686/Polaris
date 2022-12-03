@@ -51,5 +51,21 @@ namespace Polaris.Services.CharacterService
                         serviceResponse.Data = this._mapper.Map<List<GetCharacterDto>>(characters);
                         return serviceResponse;
                 }
+
+                public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+                {
+                        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+                        var character = characters.FirstOrDefault(x => x.Id.Equals(updatedCharacter.Id));
+
+                        character.Name = updatedCharacter.Name;
+                        character.HitPoint = updatedCharacter.HitPoint;
+                        character.Strenth = updatedCharacter.Strenth;
+                        character.Defense = updatedCharacter.Defense;
+                        character.Intelligence = updatedCharacter.Intelligence;
+                        character.Class = updatedCharacter.Class;
+
+                        serviceResponse.Data = this._mapper.Map<GetCharacterDto>(character);
+                        return serviceResponse;
+                }
         }
 }
