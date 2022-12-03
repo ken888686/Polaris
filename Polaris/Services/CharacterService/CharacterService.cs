@@ -56,6 +56,13 @@ namespace Polaris.Services.CharacterService
                 {
                         var serviceResponse = new ServiceResponse<GetCharacterDto>();
                         var character = characters.FirstOrDefault(x => x.Id.Equals(updatedCharacter.Id));
+                        if (character == null)
+                        {
+                                serviceResponse.Data = null;
+                                serviceResponse.Message = $"Id({updatedCharacter.Id}) does not exitst.";
+                                serviceResponse.Success = false;
+                                return serviceResponse;
+                        }
 
                         character.Name = updatedCharacter.Name;
                         character.HitPoint = updatedCharacter.HitPoint;
