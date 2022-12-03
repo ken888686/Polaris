@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Polaris.Models;
+using Polaris.Services.CharacterService;
 
 namespace Polaris.Controllers
 {
@@ -6,33 +8,31 @@ namespace Polaris.Controllers
         [Route("api/[controller]")]
         public class CharacterController : ControllerBase
         {
-                private static List<Character> characters = new List<Character>()
-                {
-                    new Character(),
-                    new Character { Name = "James" }
-                };
+                private readonly ICharacterService _characterService;
 
-                public CharacterController()
+                public CharacterController(ICharacterService characterService)
                 {
+                        this._characterService = characterService;
                 }
 
                 [HttpPost()]
                 public ActionResult<List<Character>> AddCharacter(Character character)
                 {
-                        characters.Add(character);
-                        return this.Ok(characters);
+                        var result = this._characterService.AddCharacter(character);
+                        return this.Ok(result);
                 }
 
                 [HttpGet("{id}")]
-                public ActionResult<Character> Get([FromRoute] int? id)
+                public ActionResult<Character> Get([FromRoute] int id)
                 {
-                        Console.WriteLine(id);
-                        return this.Ok(characters.First());
+                        var character = this._characterService.GetCharacterById(id);
+                        return this.Ok(character);
                 }
 
                 [HttpGet("all")]
                 public ActionResult<List<Character>> GetAll()
                 {
+                        var characters = this._characterService.GetAllCharacters();
                         return this.Ok(characters);
                 }
         }
