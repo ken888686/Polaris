@@ -16,7 +16,7 @@ namespace Polaris.Controllers
                         this._characterService = characterService;
                 }
 
-                [HttpGet("{id}")]
+                [HttpGet("{id:int}")]
                 public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetAsync([FromRoute] int id)
                 {
                         var character = await this._characterService.GetCharacterByIdAsync(id);
@@ -30,18 +30,25 @@ namespace Polaris.Controllers
                         return this.Ok(characters);
                 }
 
-                [HttpPost()]
-                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(AddCharacterDto newCharacter)
+                [HttpPost("")]
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync([FromBody] AddCharacterDto newCharacter)
                 {
                         var result = await this._characterService.AddCharacterAsync(newCharacter);
                         return this.Ok(result);
                 }
 
-                [HttpPut()]
-                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+                [HttpPut("{id:int}")]
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacterAsync([FromRoute] int id, [FromBody] UpdateCharacterDto updatedCharacter)
                 {
-                        var result = await this._characterService.UpdateCharacter(updatedCharacter);
+                        var result = await this._characterService.UpdateCharacter(id, updatedCharacter);
                         return result.Data == null ? this.BadRequest(result) : this.Ok(result);
+                }
+
+                [HttpDelete("{id:int}")]
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> DeleteAsync([FromRoute] int id)
+                {
+                        var result = await this._characterService.DeleteCharacter(id);
+                        return result;
                 }
         }
 }
