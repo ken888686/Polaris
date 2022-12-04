@@ -1,9 +1,14 @@
 ﻿global using Polaris.Models;
+using Microsoft.EntityFrameworkCore;
+using Polaris.Data;
 using Polaris.Services.CharacterService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<DataContext>(
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 builder.Services.AddControllers();
 
