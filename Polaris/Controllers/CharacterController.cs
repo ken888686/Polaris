@@ -37,10 +37,10 @@ namespace Polaris.Controllers
                         return this.Ok(result);
                 }
 
-                [HttpPut()]
-                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+                [HttpPut("{id:int}")]
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacterAsync([FromRoute] int id, [FromBody] UpdateCharacterDto updatedCharacter)
                 {
-                        var result = await this._characterService.UpdateCharacter(updatedCharacter);
+                        var result = await this._characterService.UpdateCharacter(id, updatedCharacter);
                         return result.Data == null ? this.BadRequest(result) : this.Ok(result);
                 }
         }

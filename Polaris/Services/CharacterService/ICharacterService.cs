@@ -8,6 +8,6 @@ namespace Polaris.Services.CharacterService
                 Task<ServiceResponse<GetCharacterDto>> GetCharacterByIdAsync(int id);
                 Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync();
                 Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter);
-                Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter);
+                Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int id, UpdateCharacterDto updatedCharacter);
         }
 }
