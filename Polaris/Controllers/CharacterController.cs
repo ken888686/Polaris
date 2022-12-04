@@ -43,5 +43,12 @@ namespace Polaris.Controllers
                         var result = await this._characterService.UpdateCharacter(id, updatedCharacter);
                         return result.Data == null ? this.BadRequest(result) : this.Ok(result);
                 }
+
+                [HttpDelete("{id:int}")]
+                public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> DeleteAsync([FromRoute] int id)
+                {
+                        var result = await this._characterService.DeleteCharacter(id);
+                        return result;
+                }
         }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Polaris.Dtos.Character;
+using Polaris.Models;
 
 namespace Polaris.Services.CharacterService
 {
@@ -67,6 +68,23 @@ namespace Polaris.Services.CharacterService
                         this._mapper.Map(updatedCharacter, character);
 
                         serviceResponse.Data = this._mapper.Map<GetCharacterDto>(character);
+                        return serviceResponse;
+                }
+
+                public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
+                {
+                        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+                        var character = characters.FirstOrDefault(x => x.Id.Equals(id));
+                        if (character == null)
+                        {
+                                serviceResponse.Data = null;
+                                serviceResponse.Message = $"Id({id}) does not exitst.";
+                                serviceResponse.Success = false;
+                                return serviceResponse;
+                        }
+
+                        characters.Remove(character);
+                        serviceResponse.Data = characters.Select(x => this._mapper.Map<GetCharacterDto>(x)).ToList();
                         return serviceResponse;
                 }
         }
