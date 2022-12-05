@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Polaris.Dtos.Character;
 using Polaris.Models;
 using Polaris.Services.CharacterService;
 
 namespace Polaris.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
@@ -23,6 +25,7 @@ namespace Polaris.Controllers
             return this.Ok(character);
         }
 
+        //[AllowAnonymous]
         [HttpGet("")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllAsync()
         {
