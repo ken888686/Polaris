@@ -25,6 +25,7 @@ namespace Polaris.Controllers
             return this.Ok(character);
         }
 
+        //[AllowAnonymous]
         [HttpGet("")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllAsync()
         {
