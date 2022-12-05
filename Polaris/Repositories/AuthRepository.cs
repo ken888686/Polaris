@@ -46,7 +46,7 @@ namespace Polaris.Repositories
 
         public async Task<bool> UserExists(string username)
         {
-            if (await this._context.Users.AnyAsync(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)))
+            if (await this._context.Users.AnyAsync(x => x.Username.ToLower().Equals(username.ToLower())))
             {
                 return true;
             }
