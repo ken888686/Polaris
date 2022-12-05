@@ -18,9 +18,27 @@ namespace Polaris.Repositories
             this._context = context;
         }
 
-        public async Task<ServiceResponse<int>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(string username, string password)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<string>()
+            {
+                Success = false
+            };
+            var user = await this._context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
+            if (user == null)
+            {
+                response.Message = "User not found.";
+                return response;
+            }
+            if (!this.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
+                response.Message = "Wrong password.";
+                return response;
+            }
+
+            response.Success = true;
+            response.Data = user.Id.ToString();
+            return response;
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
@@ -59,6 +77,15 @@ namespace Polaris.Repositories
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return computeHash.SequenceEqual(passwordHash);
             }
         }
     }

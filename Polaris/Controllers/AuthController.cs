@@ -27,5 +27,12 @@ namespace Polaris.Controllers
 
             return response.Success ? this.Ok(response) : this.BadRequest(response);
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<ServiceResponse<int>>> LoginAsync(UserLoginDto request)
+        {
+            var response = await this._authService.LoginAsync(request.Username, request.Password);
+            return response.Success ? this.Ok(response) : this.BadRequest(response);
+        }
     }
 }

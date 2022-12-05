@@ -17,5 +17,9 @@ namespace Polaris.Services.AuthService
         {
             return await this._authRepository.Register(user, password);
         }
+        public async Task<ServiceResponse<string>> LoginAsync(string username, string password)
+        {
+            return await this._authRepository.Login(username, password);
+        }
     }
 }
