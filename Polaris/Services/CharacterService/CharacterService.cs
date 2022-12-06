@@ -19,10 +19,10 @@ namespace Polaris.Services.CharacterService
             this._context = context;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync()
+        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync(int userId)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var characters = await this._context.Characters.ToListAsync();
+            var characters = await this._context.Characters.Where(x => x.User.Id.Equals(userId)).ToListAsync();
             serviceResponse.Data = this._mapper.Map<List<GetCharacterDto>>(characters);
             return serviceResponse;
         }
