@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Polaris.Dtos.Character;
 using Polaris.Models;
@@ -29,7 +30,17 @@ namespace Polaris.Controllers
         [HttpGet("")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllAsync()
         {
-            var characters = await this._characterService.GetAllCharactersAsync();
+            var claim = User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.NameIdentifier));
+            if ((claim == null) || (claim.Value == null))
+            {
+                return this.BadRequest(new ServiceResponse<List<GetCharacterDto>>
+                {
+                    Success = false,
+                    Message = "Token error"
+                });
+            }
+            var userId = int.Parse(claim.Value);
+            var characters = await this._characterService.GetAllCharactersAsync(userId);
             return this.Ok(characters);
         }
 
