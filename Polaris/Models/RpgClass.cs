@@ -5,7 +5,7 @@ namespace Polaris.Models
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RpgClass
     {
-        Unknow = 0,
+        Unknown = 0,
         Knight,
         Mage,
         Cleric
