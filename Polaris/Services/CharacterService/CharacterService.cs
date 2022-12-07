@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Polaris.Data;
@@ -12,17 +13,21 @@ namespace Polaris.Services.CharacterService
         private readonly IMapper _mapper;
 
         private readonly DataContext _context;
+        public readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CharacterService(IMapper mapper, DataContext context)
+        public CharacterService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             this._mapper = mapper;
             this._context = context;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync(int userId)
+        private int GetUserId() => int.Parse(this._httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var characters = await this._context.Characters.Where(x => x.User.Id.Equals(userId)).ToListAsync();
+            var characters = await this._context.Characters.Where(x => x.User.Id.Equals(this.GetUserId())).ToListAsync();
             serviceResponse.Data = this._mapper.Map<List<GetCharacterDto>>(characters);
             return serviceResponse;
         }
