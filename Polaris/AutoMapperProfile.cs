@@ -16,7 +16,7 @@ namespace Polaris
                 .ForMember(dest => dest.Strength, opt => opt.Condition(src => src.Strenth != 0))
                 .ForMember(dest => dest.Defense, opt => opt.Condition(src => src.Defense != 0))
                 .ForMember(dest => dest.Intelligence, opt => opt.Condition(src => src.Intelligence != 0))
-                .ForMember(dest => dest.Class, opt => opt.Condition(src => src.Class != RpgClass.Unknow));
+                .ForMember(dest => dest.Class, opt => opt.Condition(src => src.Class != RpgClass.Unknown));
         }
     }
 }
