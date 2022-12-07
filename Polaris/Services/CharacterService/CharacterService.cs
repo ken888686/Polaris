@@ -35,7 +35,7 @@ namespace Polaris.Services.CharacterService
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacterByIdAsync(int id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
-            var result = await this._context.Characters.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var result = await this._context.Characters.FirstOrDefaultAsync(x => x.Id.Equals(id) && x.User.Id.Equals(this.GetUserId()));
             serviceResponse.Data = this._mapper.Map<GetCharacterDto>(result);
             return serviceResponse;
         }
@@ -64,7 +64,7 @@ namespace Polaris.Services.CharacterService
         public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int id, UpdateCharacterDto updatedCharacter)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
-            var character = await this._context.Characters.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var character = await this._context.Characters.FirstOrDefaultAsync(x => x.Id.Equals(id) && x.User.Id.Equals(this.GetUserId()));
             if (character == null)
             {
                 serviceResponse.Data = null;
@@ -75,7 +75,6 @@ namespace Polaris.Services.CharacterService
 
             this._mapper.Map(updatedCharacter, character);
             await this._context.SaveChangesAsync();
-
             serviceResponse.Data = this._mapper.Map<GetCharacterDto>(character);
             return serviceResponse;
         }
@@ -83,7 +82,7 @@ namespace Polaris.Services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var character = await this._context.Characters.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var character = await this._context.Characters.FirstOrDefaultAsync(x => x.Id.Equals(id) && x.User.Id.Equals(this.GetUserId()));
             if (character == null)
             {
                 serviceResponse.Data = null;
@@ -95,7 +94,9 @@ namespace Polaris.Services.CharacterService
             this._context.Characters.Remove(character);
             await this._context.SaveChangesAsync();
 
-            serviceResponse.Data = await this._context.Characters.Select(x => this._mapper.Map<GetCharacterDto>(x)).ToListAsync();
+            serviceResponse.Data = await this._context.Characters
+                .Where(x => x.User.Id.Equals(this.GetUserId()))
+                .Select(x => this._mapper.Map<GetCharacterDto>(x)).ToListAsync();
             return serviceResponse;
         }
     }
