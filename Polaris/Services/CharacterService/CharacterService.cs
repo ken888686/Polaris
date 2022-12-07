@@ -43,13 +43,21 @@ namespace Polaris.Services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var dto = this._mapper.Map<Character>(newCharacter);
-            this._context.Characters.Add(dto);
-            await this._context.SaveChangesAsync();
+            var character = this._mapper.Map<Character>(newCharacter);
+            character.User = await this._context.Users.FirstOrDefaultAsync(x => x.Id.Equals(this.GetUserId()));
+            this._context.Characters.Add(character);
+            var result = await this._context.SaveChangesAsync();
 
-            var characters = await this._context.Characters
-                    .Select(x => this._mapper.Map<GetCharacterDto>(x))
-                    .ToListAsync();
+            if (result == 0)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Error";
+                return serviceResponse;
+            }
+
+            serviceResponse.Data = await this._context.Characters
+                .Select(x => this._mapper.Map<GetCharacterDto>(x))
+                .ToListAsync();
             return serviceResponse;
         }
 
